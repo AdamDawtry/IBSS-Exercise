@@ -7,7 +7,6 @@ import io.cucumber.java.en.When;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
