@@ -61,27 +61,29 @@ public class GoogleSteps {
     public void resultsContain(String result) {
     	// Second page of Google is not real and cannot hurt you (it is not checked)
     	WebDriver driver = W.get().driver;
-    	List<WebElement> matches = driver.findElements(By.linkText(result));
-    	Assert.assertTrue("Correct search result displayed", matches.size() > 0);
+    	// List<WebElement> matches = driver.findElements(By.linkText(result));
+    	// Assert.assertTrue("Correct search result displayed", matches.size() > 0);
+    	String pageText = driver.findElement(By.id("res")).getText();
+    	Assert.assertTrue("Correct search result displayed", pageText.contains(result));
     }
     
     @And("result stats are displayed")
     public void resultStatsDisplayed() {
     	WebDriver driver = W.get().driver;
-    	WebElement tools = driver.findElement(By.className("t2vtad hdtb-tl-sel"));
+    	WebElement tools = driver.findElement(By.id("hdtb-tls"));
     	new Actions(driver).click(tools).perform();
     }
     
     @And("number of {string} is more than {int}")
     public void numOfStatGreaterThan(String stat, int num) throws ParseException {
     	WebDriver driver = W.get().driver;
-    	String searchStats = driver.findElement(By.className("result-stats")).getText();
-    	Pattern p = Pattern.compile(String.format("([0-9,.]+(?= %s))",stat));
+    	String searchStats = driver.findElement(By.id("result-stats")).getText();
+    	Pattern p = Pattern.compile(String.format("([0-9,.]+)(?= %s)",stat));
     	Matcher m = p.matcher(searchStats);
+    	m.find();
     	String statResult = m.group();
     	Assert.assertNotNull(statResult);
 		float statResultNum = NumberFormat.getNumberInstance(Locale.ENGLISH).parse(statResult).floatValue();
-		System.out.println(String.format("%s: %.2f", stat,statResultNum));
 		Assert.assertTrue(statResultNum > 0);
     }
 
