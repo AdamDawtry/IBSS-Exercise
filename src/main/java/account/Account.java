@@ -23,7 +23,7 @@ public class Account {
 	
 	private boolean validTransaction(String ref, float amount) {
 		if (amount < 0) {
-			System.out.println("Invalid: cannot deposit a negative value");
+			System.out.println("Invalid: cannot withdraw/deposit a negative value");
 			System.out.println("No change has been made");
 			return false;
 		}
@@ -46,7 +46,7 @@ public class Account {
 		if (this.validTransaction(ref, amount)) {
 			this.setBalance(this.getBalance() + amount);
 			this.accHistory.put(ref, amount);
-			System.out.println(String.format("%.2g$n was successfully deposited into account %s",amount,this.accNo));
+			System.out.println(String.format("%.2f was successfully deposited into account %s",amount,this.accNo));
 		}
 	}
 	/**
@@ -58,8 +58,8 @@ public class Account {
 	public void withdraw(String ref, float amount) {
 		if (this.validTransaction(ref, amount)) {
 			this.setBalance(this.getBalance() - amount);
-			this.accHistory.put(ref, amount);
-			System.out.println(String.format("%.2g$n was successfully withdrawn from account %s",amount,this.accNo));
+			this.accHistory.put(ref, -amount);
+			System.out.println(String.format("%.2f was successfully withdrawn from account %s",amount,this.accNo));
 		}
 		
 	}
@@ -71,11 +71,12 @@ public class Account {
 	 */
 	public String produceAccountStatement() {
 		String statement = String.format("Name: %s\nAccount: %s\n\n",this.getAccName(),this.getAccNo());
+		statement = statement.concat("Account History\n---------------\n");
 		String[] refs = this.accHistory.keySet().toArray(new String[0]);
 		for (String r:refs) {
-			statement.concat(String.format("%s %.2g$n\n",r,this.accHistory.get(r)));
+			statement = statement.concat(String.format("%s %.2f\n",r,this.accHistory.get(r)));
 		}
-		statement.concat(String.format("\nBalance: %d",this.getBalance()));
+		statement = statement.concat(String.format("\nBalance: %.2f",this.getBalance()));
 		return statement;
 	}
 	
